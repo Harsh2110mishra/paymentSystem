@@ -14,26 +14,26 @@ app.get('/', (req, res) => {
 
 app.post('/orders', async (req, res) => {
     try {
-        const amount = req.body.amount
-        const receipt_id = Date.now();
-        var instance = new Razorpay({
-            key_id: process.env.KEY_ID,
-            key_secret: process.env.KEY_SECRET,
-        });
-    
-        const order = await instance.orders.create({
-            amount: amount * 100,
-            currency: "INR",
-            receipt: `receipt#${receipt_id}`
-        });
-        const result = {
-          success: true,
-          amount: amount,
-          receipt_id: receipt_id,
-          order: order,
-        };
-        console.log("result: ",result)
-        res.status(200).send(result);
+      const amount = req.body.amount; // Amount from body
+      const receipt_id = Date.now(); // For generating unique id
+      var instance = new Razorpay({
+        key_id: process.env.KEY_ID,
+        key_secret: process.env.KEY_SECRET,
+      });
+
+      const order = await instance.orders.create({
+        amount: amount * 100, //100 multiply because it always is in paise
+        currency: "INR",
+        receipt: `receipt#${receipt_id}`,
+      });
+      const result = {
+        success: true,
+        amount: amount,
+        receipt_id: receipt_id,
+        order: order,
+      };
+      console.log("result: ", result);
+      res.status(200).send(result);
     }
     catch (error) {
         console.log("Error: ",error)
